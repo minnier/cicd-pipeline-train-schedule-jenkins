@@ -14,10 +14,10 @@ pipeline {
         }
         steps {
             script {
-                app = docker.build("minnier/train-schedule")
-                app.inside {
-                    sh 'echo $(curl localhost:8080)'
-                }
+                app = docker.build("minnier/train-schedule:latest")
+//                 app.inside {
+//                     sh 'echo $(curl localhost:8080)'
+//                 }
             }
         }
     }
@@ -27,9 +27,10 @@ pipeline {
         }
         steps {
             script {
-                docker.withRegistry('docker.io', 'docker_hub_login') {
+//                 docker.withRegistry('docker.io', 'docker_hub_login') {
+                  docker.withRegistry([credentialsId: "docker_hub_login", url: ""]) {
                     app.push("${env.BUILD_NUMBER}")
-                    app.push("latest")
+                    //app.push("latest")
                 }
             }
         }
